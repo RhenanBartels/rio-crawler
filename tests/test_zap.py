@@ -10,7 +10,7 @@ class TestZap(TestCase):
         self.url = URL.format(neighbourhood='BOTAFOGO', zone='Zona Sul',
                               page='1', type='apartamento')
 
-        instance = _chrome.return_value
+        instance = _chrome()
         self.manager = ZapCrawlerManager(self.url)
         self.manager.browser = instance
 
@@ -26,12 +26,13 @@ class TestZap(TestCase):
             'list-cell')
 
     @mock.patch('zapcrawler.ZapCrawlerManager.get_information')
-    def test_normalize_information(self, _information):
+    def test_normalize_information(self, _get_information):
         data = ['R$ 2.400\nCAMPO BELO\nRua Constantino de Souza\nSao Paulo - Sp\nApartamento\n1 quarto | 1 vaga | 48m2\n[?]']
-        info = mock.MagicMock()
-        info.text = data[0]
 
-        _information.return_value = [info]
+        content_chrome_selenium = mock.MagicMock()
+        content_chrome_selenium.text = data[0]
+
+        _get_information.return_value = [content_chrome_selenium]
 
         self.manager.content = data
 
