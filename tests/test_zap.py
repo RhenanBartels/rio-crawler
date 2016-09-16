@@ -18,3 +18,24 @@ class TestZap(TestCase):
         self.manager.visit()
 
         self.manager.browser.get.assert_called_once_with(self.url)
+
+    def test_get_informations(self):
+        self.manager.get_information()
+
+        self.manager.browser.find_elements_by_class_name.assert_called_once_with(
+            'list-cell')
+
+    @mock.patch('zapcrawler.ZapCrawlerManager.get_information')
+    def test_normalize_information(self, _information):
+        data = ['R$ 2.400\nCAMPO BELO\nRua Constantino de Souza\nSao Paulo - Sp\nApartamento\n1 quarto | 1 vaga | 48m2\n[?]']
+        info = mock.MagicMock()
+        info.text = data[0]
+
+        _information.return_value = [info]
+
+        self.manager.content = data
+
+        response = self.manager.normalize_information()
+        expected = ['R$ 2.400', '48m2', '1 quarto']
+
+        self.assertEqual(response, expected)
