@@ -20,6 +20,8 @@ class ZapCrawlerManager(object):
         self.content = self.browser.find_elements_by_class_name('list-cell')
 
     def normalize_information(self):
-        content = self.get_information()[0].text
+        contents = self.get_information()
 
-        return [m.search(content).group() for m in self.compiled_patterns]
+        return [[m.search(content.text).group()
+                 for content in contents]
+                for m in self.compiled_patterns]

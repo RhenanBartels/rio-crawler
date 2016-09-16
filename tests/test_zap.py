@@ -37,6 +37,6 @@ class TestZap(TestCase):
         self.manager.content = data
 
         response = self.manager.normalize_information()
-        expected = ['R$ 2.400', '48m2', '1 quarto']
+        expected = [['R$ 2.400'], ['48m2'], ['1 quarto']]
 
         self.assertEqual(response, expected)
